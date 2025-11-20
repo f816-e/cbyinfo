@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Sumador y Convertidor</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      padding-left: 20%;
+      padding-right: 20%;
+    }
+    h2 {
+      text-align: center;
+      background: #4CAF50;
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+    }
+    .card {
+      background: white;
+      padding: 30px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    .card2 {
+      background: white;
+      padding: 40px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+    }
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+    th, td {
+      padding: 10px;
+      text-align: center;
+    }
+    input {
+      width: 40%;
+      padding: 5px;
+      text-align: center;
+    }
+    button {
+      padding: 8px 15px;
+      border: none;
+      border-radius: 6px;
+      background: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <h2>Sumador de Pesos</h2>
+  <div class="card">
+    <table>
+      <tr>
+        <th>Billete</th>
+        <th>Cantidad</th>
+        <th>Total</th>
+      </tr>
+      <tr>
+        <td>$20</td>
+        <td><input type="number" id="b20" value="" placeholder="0"></td>
+        <td id="t20">$0</td>
+      </tr>
+      <tr>
+        <td>$50</td>
+        <td><input type="number" id="b50" value="" placeholder="0"></td>
+        <td id="t50">$0</td>
+      </tr>
+      <tr>
+        <td>$100</td>
+        <td><input type="number" id="b100" value="" placeholder="0"></td>
+        <td id="t100">$0</td>
+      </tr>
+      <tr>
+        <td>$200</td>
+        <td><input type="number" id="b200" value="" placeholder="0"></td>
+        <td id="t200">$0</td>
+      </tr>
+      <tr>
+        <td>$500</td>
+        <td><input type="number" id="b500" value="" placeholder="0"></td>
+        <td id="t500">$0</td>
+      </tr>
+      <tr>
+        <td>$1,000</td>
+        <td><input type="number" id="b1000" value="" placeholder="0"></td>
+        <td id="t1000">$0</td>
+      </tr>
+    </table>
+        <button onclick="calcular()">Calcular Total</button>
+        <h3>Total: <span id="subtotal">$0</span></h3>
+  </div>
+
+<h2>Convertidor Pesos ↔ Dólares</h2>
+<div class="card2">
+    <label>Ingresa tu nombre: </label>
+    <input type="text" id="nombre" placeholder="Nombre completo"><br><br>
+
+    <label>Ingresa el valor actual del dólar (MXN):</label>
+    <input type="number" id="tasaCambio" step="0.01" placeholder="$0.00"><br><br><br>
+
+    <label>Peso a dólar:</label>
+    <input type="number" id="pesos" placeholder="Ingresa Pesos Mexicanos">
+    <button onclick="aDolares()">Convertir</button>
+    <p><b>Dólares:</b> <span id="dolares">0</span></p><br><br><br>
+
+    <label>Dólar a peso:</label>
+    <input type="number" id="usd" placeholder="Ingresa Dólares USD">
+    <button onclick="aPesos()">Convertir</button>
+    <p><b>Pesos:</b> <span id="pesosConv">0</span></p>
+
+    <form action="index.html">
+    <input type="submit" value="Regresar al inicio" style="
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #91ef44, #3cd3ee);
+        color: rgb(0, 0, 0);
+        font-size: 15px;
+        cursor: pointer;
+        font-weight: bold;
+        margin-top: 20px;
+    ">
+</form>
+</div>
+
+<script>
+//SUMATORIA
+   function calcular() {
+    // Valores de billetes
+    let valores = { 
+      b20: 20, 
+      b50: 50, 
+      b100: 100, 
+      b200: 200, 
+      b500: 500, 
+      b1000: 1000 
+    };
+
+    let totalGeneral = 0;
+
+    // Recorremos cada billete
+    for (let id in valores) {
+      let cantidad = parseInt(document.getElementById(id).value) || 0;
+      let subtotal = cantidad * valores[id];
+      document.getElementById("t" + id.replace("b","")).innerText = "$" + subtotal;
+      totalGeneral += subtotal;
+    }
+
+    // Total final
+    document.getElementById("subtotal").innerText = "$" + totalGeneral;
+  }
+
+//CONVERSIÓN DOLAR Y PESOS MX
+  function aDolares() {
+    let tasa = parseFloat(document.getElementById("tasaCambio").value) || 18;
+    let pesos = parseFloat(document.getElementById("pesos").value) || 0;
+    let nombre = document.getElementById("nombre").value;
+    let dolares = (pesos / tasa).toFixed(2);
+    document.getElementById("dolares").innerText = nombre ? `${nombre}, ${dolares} USD` : dolares;
+  }
+
+  function aPesos() {
+    let tasa = parseFloat(document.getElementById("tasaCambio").value) || 18;
+    let usd = parseFloat(document.getElementById("usd").value) || 0;
+    let nombre = document.getElementById("nombre").value;
+    let pesos = (usd * tasa).toFixed(2);
+    document.getElementById("pesosConv").innerText = nombre ? `${nombre}, $${pesos} MXN` : pesos;
+  }
+</script>
+
+</body>
+</html>
